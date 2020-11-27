@@ -6,4 +6,7 @@
 # testing
 /coverage
 
+/input
+/output
+
 package-lock.json
