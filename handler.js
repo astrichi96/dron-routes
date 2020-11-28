@@ -1,39 +1,35 @@
 const fs = require('fs');
 const startCase = require('lodash/startCase');
 const { move, turnLeft, turnRight } = require('./actions');
+const { INSTRUCTIONS } = require('./constants');
 
-const writeNewRow = (outputPath, row) => fs.appendFileSync(outputPath, row);
+const writeRows = (outputPath, rows) => fs.writeFileSync(outputPath, rows);
 
-const processingFiles = (outputPath, list, initialValues) => {
+const processRoutes = (outputPath, list, initialValues) => {
   let { coordinates, direction } = initialValues;
-  list.map((instructions, index) => {
+
+  const results = list.map((instructions) => {
     const result = mapCoordinates(coordinates, direction, instructions);
     coordinates = result.coordinates;
     direction = result.direction;
-    buildRow(outputPath, result, index + 1 === list.length);
+    return buildRow(result);
   });
+  writeRows(outputPath, results.join('\n'));
 };
 
 const mapCoordinates = (coordinates, direction, instructions) => {
   for (const item of instructions) {
-    if (item === 'A') coordinates = move(coordinates, direction);
-    if (item === 'D') direction = turnRight(direction);
-    if (item === 'I') direction = turnLeft(direction);
+    if (item === INSTRUCTIONS.MOVE) coordinates = move(coordinates, direction);
+    if (item === INSTRUCTIONS.TURN_RIGTH) direction = turnRight(direction);
+    if (item === INSTRUCTIONS.TURN_LEFT) direction = turnLeft(direction);
   }
 
   return { coordinates, direction };
 };
 
-const buildRow = (outputPath, data, isLastRow) => {
-  const {
-    coordinates: { x, y },
-    direction
-  } = data;
-  let row = `(${x},${y}) direccion ${startCase(direction.toLowerCase())}`;
-  if (!isLastRow) row = `${row}\n`;
-  return writeNewRow(outputPath, row);
-};
+const buildRow = ({ coordinates: { x, y }, direction }) =>
+  `(${x},${y}) direccion ${startCase(direction.toLowerCase())}`;
 
 module.exports = {
-  processingFiles
+  processRoutes
 };

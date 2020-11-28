@@ -1,3 +1,4 @@
+const { TURN_LEFT_RULES, TURN_RIGTH_RULES } = require('./constants');
 const move = (coordenadas, direction) => {
   switch (direction) {
     case 'NORTE':
@@ -11,31 +12,9 @@ const move = (coordenadas, direction) => {
   }
 };
 
-const turnRight = (direction) => {
-  switch (direction) {
-    case 'NORTE':
-      return 'OCCIDENTE';
-    case 'SUR':
-      return 'ORIENTE';
-    case 'ORIENTE':
-      return 'NORTE';
-    case 'OCCIDENTE':
-      return 'SUR';
-  }
-};
+const turnRight = (direction) => TURN_RIGTH_RULES[direction];
 
-const turnLeft = (direction) => {
-  switch (direction) {
-    case 'NORTE':
-      return 'ORIENTE';
-    case 'SUR':
-      return 'OCCIDENTE';
-    case 'ORIENTE':
-      return 'SUR';
-    case 'OCCIDENTE':
-      return 'NORTE';
-  }
-};
+const turnLeft = (direction) => TURN_LEFT_RULES[direction];
 
 module.exports = {
   move,

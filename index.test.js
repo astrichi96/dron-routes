@@ -1,6 +1,7 @@
 const fs = require('fs');
 const { expect } = require('chai');
 const utils = require('./utils');
+let { main } = require('./deliveryRunner');
 
 const { INPUT_DIR, OUTPUT_DIR, DIRECTORIES_NOT_FOUND } = require('./constants');
 
@@ -13,6 +14,8 @@ describe('Handler module', () => {
   ];
 
   beforeAll(() => {
+    utils.removeDirectory(INPUT_DIR);
+    utils.removeDirectory(OUTPUT_DIR);
     utils.createDirectory(INPUT_DIR);
     const path = `${INPUT_DIR}in01_test.txt`;
     initialInstructions.map((i, index) => {
@@ -26,8 +29,6 @@ describe('Handler module', () => {
     utils.removeDirectory(OUTPUT_DIR);
   });
 
-  let { main } = require('./index');
-
   describe('When the project finish sucessfully', () => {
     it('When the output files with the coordinates is generated', async () => {
       await main();
@@ -38,7 +39,6 @@ describe('Handler module', () => {
 
   describe('When the project failed', () => {
     it('When the /input folder does not exists', async () => {
-      let isFailed = false;
       try {
         await main();
       } catch (error) {
