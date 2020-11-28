@@ -25,6 +25,4 @@ Run the test available in the project, you can also check the coverage running t
 ### Testing dependencies
 
 - **jest**
-- **chat**
-- **sinon**
-- **supertest**
+- **chai**

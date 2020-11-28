@@ -1,27 +1,30 @@
-const fs = require('fs');
 const { expect } = require('chai');
 const utils = require('./utils');
 let { main } = require('./deliveryRunner');
 
-const { INPUT_DIR, OUTPUT_DIR, DIRECTORIES_NOT_FOUND } = require('./constants');
+const {
+  INPUT_DIR,
+  OUTPUT_DIR,
+  DIRECTORIES_NOT_FOUND,
+  CARDINAL_POINTS
+} = require('./constants');
 
 describe('Handler module', () => {
   const initialInstructions = ['AAAAIAA', 'DDDAIAD', 'AAIADAD'];
-  const coordinatesExpected = [
-    '(-2,4) direccion Oriente',
-    '(-1,3) direccion Sur',
-    '(0,0) direccion Oriente'
+  const results = [
+    { coordinates: { x: -2, y: 4 }, direction: CARDINAL_POINTS.ORIENTE },
+    { coordinates: { x: -1, y: 3 }, direction: CARDINAL_POINTS.SUR },
+    { coordinates: { x: -0, y: 0 }, direction: CARDINAL_POINTS.ORIENTE }
   ];
+  const coordinatesExpected = results.map((result) => utils.buildRow(result));
 
   beforeAll(() => {
     utils.removeDirectory(INPUT_DIR);
     utils.removeDirectory(OUTPUT_DIR);
     utils.createDirectory(INPUT_DIR);
     const path = `${INPUT_DIR}in01_test.txt`;
-    initialInstructions.map((i, index) => {
-      const text = index === initialInstructions.length - 1 ? i : `${i}\n`;
-      fs.appendFileSync(path, text);
-    });
+
+    utils.writeRows(path, initialInstructions.join('\n'));
   });
 
   afterEach(() => {

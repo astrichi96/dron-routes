@@ -1,9 +1,7 @@
 const fs = require('fs');
-const startCase = require('lodash/startCase');
 const { move, turnLeft, turnRight } = require('./actions');
 const { INSTRUCTIONS } = require('./constants');
-
-const writeRows = (outputPath, rows) => fs.writeFileSync(outputPath, rows);
+const { buildRow, writeRows } = require('./utils');
 
 const processRoutes = (outputPath, list, initialValues) => {
   let { coordinates, direction } = initialValues;
@@ -26,9 +24,6 @@ const mapCoordinates = (coordinates, direction, instructions) => {
 
   return { coordinates, direction };
 };
-
-const buildRow = ({ coordinates: { x, y }, direction }) =>
-  `(${x},${y}) direccion ${startCase(direction.toLowerCase())}`;
 
 module.exports = {
   processRoutes

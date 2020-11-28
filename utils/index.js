@@ -1,4 +1,5 @@
 const fs = require('fs');
+const startCase = require('lodash/startCase');
 const { DIRECTORIES_NOT_FOUND } = require('../constants');
 
 // Read all files from the input directory
@@ -27,9 +28,16 @@ const removeDirectory = (filePath) => {
   }
 };
 
+const buildRow = ({ coordinates: { x, y }, direction }) =>
+  `(${x},${y}) direccion ${startCase(direction.toLowerCase())}`;
+
+const writeRows = (outputPath, rows) => fs.writeFileSync(outputPath, rows);
+
 module.exports = {
   readdir,
   readFiles,
   createDirectory,
-  removeDirectory
+  removeDirectory,
+  buildRow,
+  writeRows
 };

@@ -1,13 +1,17 @@
-const { TURN_LEFT_RULES, TURN_RIGTH_RULES } = require('./constants');
+const {
+  TURN_LEFT_RULES,
+  TURN_RIGTH_RULES,
+  CARDINAL_POINTS
+} = require('./constants');
 const move = (coordenadas, direction) => {
   switch (direction) {
-    case 'NORTE':
+    case CARDINAL_POINTS.NORTE:
       return { ...coordenadas, y: coordenadas.y + 1 };
-    case 'SUR':
+    case CARDINAL_POINTS.SUR:
       return { ...coordenadas, y: coordenadas.y - 1 };
-    case 'ORIENTE':
+    case CARDINAL_POINTS.ORIENTE:
       return { ...coordenadas, x: coordenadas.x - 1 };
-    case 'OCCIDENTE':
+    case CARDINAL_POINTS.OCCIDENTE:
       return { ...coordenadas, x: coordenadas.x + 1 };
   }
 };
