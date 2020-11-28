@@ -1,6 +1,6 @@
-const { readFiles, readdir, writeFile } = require('./utils');
+const utils = require('./utils');
 
-const { processingFiles } = require('./handler');
+const handler = require('./handler');
 const {
   INPUT_DIR,
   OUTPUT_DIR,
@@ -8,17 +8,17 @@ const {
   DIRECTORIES_NOT_FOUND
 } = require('./constants');
 
-const main = () => {
+const main = async () => {
   return new Promise((resolve, reject) => {
+    utils.createDirectory(OUTPUT_DIR);
     try {
-      const filenames = readdir(INPUT_DIR);
+      const filenames = utils.readdir(INPUT_DIR);
       for (const filename of filenames) {
-        const list = readFiles(`${INPUT_DIR}${filename}`);
-        const stream = writeFile(
-          OUTPUT_DIR,
-          `${filename.replace('in', 'out')}`
-        );
-        processingFiles(stream, list, INITIAL_VALUES);
+        const inputPath = `${INPUT_DIR}${filename}`;
+        const outputPath = `${OUTPUT_DIR}${filename.replace('in', 'out')}`;
+
+        const list = utils.readFiles(inputPath);
+        handler.processingFiles(outputPath, list, INITIAL_VALUES);
       }
       console.log(
         'The routes has been created, See the files in this path: dron-routes/output'
@@ -32,6 +32,5 @@ const main = () => {
   });
 };
 
-module.exports = main;
-
+module.exports = { main };
 main();

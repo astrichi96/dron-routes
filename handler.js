@@ -1,18 +1,17 @@
+const fs = require('fs');
 const startCase = require('lodash/startCase');
 const { move, turnLeft, turnRight } = require('./actions');
 
-// Write a new row on Stream file
-const writeNewRow = (stream, row) => stream.write(row);
+const writeNewRow = (outputPath, row) => fs.appendFileSync(outputPath, row);
 
-const processingFiles = (stream, list, initialValues) => {
+const processingFiles = (outputPath, list, initialValues) => {
   let { coordinates, direction } = initialValues;
-  list.map((instructions) => {
+  list.map((instructions, index) => {
     const result = mapCoordinates(coordinates, direction, instructions);
     coordinates = result.coordinates;
     direction = result.direction;
-    buildRow(stream, result);
+    buildRow(outputPath, result, index + 1 === list.length);
   });
-  stream.end();
 };
 
 const mapCoordinates = (coordinates, direction, instructions) => {
@@ -25,13 +24,14 @@ const mapCoordinates = (coordinates, direction, instructions) => {
   return { coordinates, direction };
 };
 
-const buildRow = (stream, data) => {
+const buildRow = (outputPath, data, isLastRow) => {
   const {
     coordinates: { x, y },
     direction
   } = data;
-  const row = `(${x},${y}) direccion ${startCase(direction.toLowerCase())}\n`;
-  return writeNewRow(stream, row);
+  let row = `(${x},${y}) direccion ${startCase(direction.toLowerCase())}`;
+  if (!isLastRow) row = `${row}\n`;
+  return writeNewRow(outputPath, row);
 };
 
 module.exports = {

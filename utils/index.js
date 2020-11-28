@@ -10,12 +10,6 @@ const readdir = (path) => {
 // Read file by file from input directory
 const readFiles = (path) => fs.readFileSync(path, 'utf8').split('\n');
 
-// Create stream to write in the file when the row is available
-const writeFile = (path, filename) => {
-  createDirectory(path);
-  return fs.createWriteStream(`${path}${filename}`);
-};
-
 const existsDirOrFile = (filePath = '') => fs.existsSync(filePath);
 
 const createDirectory = (filePath) => {
@@ -36,7 +30,6 @@ const removeDirectory = (filePath) => {
 module.exports = {
   readdir,
   readFiles,
-  writeFile,
   createDirectory,
   removeDirectory
 };
