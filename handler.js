@@ -30,7 +30,7 @@ const buildRow = (stream, data) => {
     coordinates: { x, y },
     direction
   } = data;
-  const row = `(${x},${y}) direccion ${startCase(direction)}\n`;
+  const row = `(${x},${y}) direccion ${startCase(direction.toLowerCase())}\n`;
   return writeNewRow(stream, row);
 };
 

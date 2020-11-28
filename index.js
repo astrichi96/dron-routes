@@ -1,4 +1,4 @@
-const fs = require('fs');
+const { readFiles, readdir, writeFile } = require('./utils');
 
 const { processingFiles } = require('./handler');
 const {
@@ -15,7 +15,8 @@ const main = () => {
       for (const filename of filenames) {
         const list = readFiles(`${INPUT_DIR}${filename}`);
         const stream = writeFile(
-          `${OUTPUT_DIR}${filename.replace('in', 'out')}`
+          OUTPUT_DIR,
+          `${filename.replace('in', 'out')}`
         );
         processingFiles(stream, list, INITIAL_VALUES);
       }
@@ -26,28 +27,11 @@ const main = () => {
     } catch (error) {
       if (error.message === DIRECTORIES_NOT_FOUND.INPUT)
         console.log('Please create input folder with the files routes');
-      if (error.message === DIRECTORIES_NOT_FOUND.OUTPUT)
-        console.log('Please create output folder with the files routes');
       reject(error);
     }
   });
 };
 
-// Read all files from the input directory
-const readdir = (path) => {
-  if (!existsDirOrFile(path)) throw Error(DIRECTORIES_NOT_FOUND.INPUT);
-  return fs.readdirSync(path);
-};
-
-// Read file by file from input directory
-const readFiles = (path) => fs.readFileSync(path, 'utf8').split('\n');
-
-// Create stream to write in the file when the row is available
-const writeFile = (path) => {
-  if (!existsDirOrFile(OUTPUT_DIR)) throw Error(DIRECTORIES_NOT_FOUND.OUTPUT);
-  return fs.createWriteStream(path);
-};
-
-const existsDirOrFile = (filePath = '') => fs.existsSync(filePath);
+module.exports = main;
 
 main();
